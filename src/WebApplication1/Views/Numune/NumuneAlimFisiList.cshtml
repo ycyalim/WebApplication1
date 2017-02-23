@@ -1,0 +1,58 @@
+﻿@model  KhufuMobile.Models.ViewModels.NumuneListModel
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="jumbotron">
+    <h1>Numune Alım Fişleri</h1>
+</div>
+<a asp-controller="Numune" asp-action="Create"
+   asp-all-route-data='new Dictionary<string, string> { { "operation", "New" }, { "id", Model.Tipi.Id.ToString() } }'
+   class="btn btn-success">Yeni</a>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tarih</th>
+                <th>RaporNo</th>
+                <th>Tipi</th>
+                <th>Kurum</th>
+                <th>Numune Alan</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model.List)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Tarih</td>
+                    <td>@item.RaporNo</td>
+                    @if (item.NumuneAlimTipi != null)
+                    {
+                        <td>
+                            @item.NumuneAlimTipi.Aciklama
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @string.Empty
+                        </td>
+                    }
+                    <td>@item.Kurum.Aciklama</td>
+                    <td>@item.NumuneyiAlan.Ad</td>
+                    <td>
+                        <a asp-controller="Numune" asp-action="Edit" asp-route-id=@item.Id class="btn btn-primary">Değiştir</a>
+                        <a asp-controller="Numune" asp-action="Delete" asp-route-id=@item.Id class="btn btn-info">Sil</a>
+                    </td>
+                    @{ i++;}
+                </tr>
+                        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,311 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model  KhufuMobile.Models.ViewModels.NumuneAlimModel
+
+<div ng-app="analizApp" ng-controller="analizCtrl">
+
+    <form class="form-horizontal" accept-charset="utf-8" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="container">
+            <input asp-for=@Model.NumuneFisiId style="display:none" />
+            <a href="#demo" class="btn btn-info" data-toggle="collapse">Genel</a>
+            <div id="demo" class="collapse">
+                <div class="container gc-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-container table-container">
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Sıra No
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.SiraNo disabled class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Numune Tipi
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <select asp-for=@Model.NumuneTipi asp-items=@Model.Tipler ng-model="NumuneTipi" ng-change="numuneChange()" class="form-control"></select>
+                                        <span asp-validation-for=@Model.NumuneTipi class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Numune Adı
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.NumuneAdi class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Alım Yeri
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.AlimYeri class='form-control' style="display:inline;" type='text' />
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label class="col-sm-3 control-label">
+                                        Kodeks
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" style="display:inline" asp-for=@Model.KodeksId asp-items=@Model.KodeksListe  ng-model="KodeksId" ></select>
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">...</button>
+                                        <span asp-validation-for=@Model.KodeksId class="text-danger"></span>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div id="myModal" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Kodeks Seç</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="thead-inverse">
+                                                                <tr>
+                                                                    <th>SıraNo</th>
+                                                                    <th>NumuneTipi</th>
+                                                                    <th>Kod</th>
+                                                                    <th>Açiklama</th>
+                                                                    <th>AnalizMethodu</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var item in Model.Kodeksler)
+                                                                {
+                                                                    <tr  ng-class-odd="'striped'">
+                                                                        <td>
+                                                                            <span>@item.SiraNo</span>
+                                                                        </td>
+                                                                        <td>
+                                                                        @if (item.NumuneTipi != null)
+                                                                        {
+                                                                            <span> @item.NumuneTipi.Kod</span>
+                                                                        }
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>@item.Kod</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>@item.Aciklama</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>@item.AnalizMethodu</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-info">
+                                                                                <span ng-click="KodeksSec('@item.Id')" data-dismiss="modal" class="glyphicon glyphicon-plus-sign"></span>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        BkRNo
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.BkRNo class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        İst. Analizler
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.IstAnalizler class='form-control' type='text' />
+                                    </div>
+                                </div>
+
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Miktar
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Miktar ng-model="Miktar" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Birim
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Birim ng-model="Birim" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Sıcaklık
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Sicaklik ng-model="Sicaklik" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Açıklama
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Aciklama class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Baş. Tarih
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.BasTarih class='form-control' type='date' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Bitiş Tarih
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.BitTarih class='form-control' type='date' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2></h2>
+            <a href="#demo1" class="btn btn-info" data-toggle="collapse">Gıda</a>
+            <div id="demo1" class="collapse">
+                <div class="container gc-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-container table-container">
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Cinsi
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Cinsi ng-model="Cinsi" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Ambalajı
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.Ambalaji ng-model="Ambalaji" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Üretim Tarihi
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.UretimTarihi class='form-control' type='date' />
+                                    </div>
+                                </div>
+
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Son Kullanma Tarihi
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.SonKulTarihi  class='form-control' type='date' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        ÜretimSk Tarihi
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.UretimSkTarihi ng-model="UretimSkTarihi" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Seri Part No
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.SeriPartNo ng-model="SeriPartNo" class='form-control' type='text' />
+                                    </div>
+                                </div>
+                                <div class="form-group customerName_form_group gcrud-form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Üretici Firma Adı
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input asp-for=@Model.UreticiFirmaAdi class='form-control' type='text' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2></h2>
+            <input type="submit" value="Kaydet" class="btn btn-default" />
+        </div>
+    </form>
+
+</div>
+
+<script>
+    var app = angular.module('analizApp', []);
+    app.controller('analizCtrl', function ($scope, $http) {
+
+
+
+        var apiurl = "/NumuneAlim/Tipler?numuneId=" + '@Model.NumuneFisiId';
+        $http.get(apiurl).then(function (response) {
+            $scope.tipler = response.data;
+        });
+
+        $scope.numuneChange = function () {
+            angular.forEach($scope.tipler, function (value) {
+                if (value.id == $scope.NumuneTipi) {
+                    $scope.Miktar = value.onDegerMiktar;
+                    $scope.Birim = value.onDegerBirim;
+                    $scope.Sicaklik = value.ondegerSicaklik;
+                    //if gida
+                    $scope.Ambalaji = value.onDegerAmbalaji;
+                    $scope.SeriPartiNo = value.onDegerSeriPartiNo;
+                    $scope.UreticiFirmaAdi = value.onDegerUreticiFirmaAdi;
+                    $scope.UretimSKTarihi = value.onDegerUretimSKTarihi;
+                    //else
+                    //$scope.KabinCinsi = value.OnDegerKabinCinsi;
+                    //$scope.AlinmaSekli = value.OnDegerAlinmaSekli;
+                }
+            });
+
+        }
+
+        $scope.KodeksSec = function KodeksSec(id) {
+            $scope.KodeksId = id;
+        }
+
+    });
+</script>

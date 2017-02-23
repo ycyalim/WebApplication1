@@ -1,0 +1,49 @@
+﻿@model  KhufuMobile.Models.ViewModels.NumuneAlimListModel
+
+<div class="jumbotron">
+    <h1>Numune Alım Fişleri</h1>
+</div>
+<a asp-controller="NumuneAlim" asp-action="Create" asp-route-numuneId=@Model.NumuneAlimFisiId class="btn btn-primary">Yeni</a>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>SıraNo</th>
+                <th>KayıtNo</th>
+                <th>Web</th>
+                <th>NumuneTipi</th>
+                <th>NumuneAdi</th>
+                <th>AlimYeri</th>
+                <th>Miktar</th>
+                <th>Birim</th>
+                <th>Kodeks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model.List)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.SiraNo</td>
+                    <td>@item.KayitNo</td>
+                    <td>@item.WebGoster</td>
+                    <td>@item.NumuneTipi</td>
+
+                    <td>@item.NumuneAdi</td>
+                    <td>@item.AlimYeri</td>
+                    <td>@item.Miktar</td>
+                    <td>@item.Birim</td>
+                    <td>@item.Kodeks</td>
+                    <td>
+                        <a asp-controller="NumuneAlim" asp-action="Edit" asp-route-numuneAlimId=@item.Id class="btn btn-primary">Değiştir</a>
+                        <a asp-controller="NumuneAlim" asp-action="Delete" asp-route-numuneAlimId=@item.Id class="btn btn-info">Sil</a>
+                    </td>
+                    @{ i++;}
+                </tr>
+                        }
+        </tbody>
+    </table>
+</div>

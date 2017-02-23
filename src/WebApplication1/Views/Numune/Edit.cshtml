@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model  KhufuMobile.Models.ViewModels.NumuneAlimFisiModel
+<div class="jumbotron">
+    <h1>Numune Alım Fişi</h1>
+</div>
+<div class="container gc-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-container table-container">
+                <form class="form-horizontal" accept-charset="utf-8" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Numune Alım
+                        </label>
+                        <div class="col-sm-9">
+                            <input asp-for=@Model.Numune.NumuneAlimTipi.Aciklama class='form-control' disabled type='text' maxlength='50' />
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Numuneyi Alan:
+                        </label>
+                        <div class="col-sm-9">
+                            <select asp-for=@Model.Numune.NumuneyiAlanId asp-items=@Model.PersonelList class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Numuneyi Veren:
+                        </label>
+                        <div class="col-sm-9">
+                            <select asp-for=@Model.Numune.KurumId asp-items=@Model.KurumlarList class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Analiz Amacı:
+                        </label>
+                        <div class="col-sm-9">
+                            <input asp-for=@Model.Numune.AnalizAmaci
+                                   type="text" class="form-control">
+                            <span asp-validation-for=@Model.Numune.AnalizAmaci class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Tarih:
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="date" asp-for=@Model.Numune.Tarih class="form-control">
+                            <span asp-validation-for="@Model.Numune.Tarih" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Lab Ulaş. Tarih:
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="date" asp-for=@Model.Numune.LaboratuvaraUlasmaTarihi class="form-control">
+                            <span asp-validation-for=@Model.Numune.LaboratuvaraUlasmaTarihi class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group customerName_form_group gcrud-form-group">
+                        <label class="col-sm-3 control-label">
+                            Rapor No:
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for=@Model.Numune.RaporNo class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Değiştir" class="btn btn-primary" />
+                            <a asp-controller="NumuneAlim" asp-action="NumuneAlimList" asp-route-numuneFisiId=@Model.Numune.Id class="btn btn-info">Numuneler</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

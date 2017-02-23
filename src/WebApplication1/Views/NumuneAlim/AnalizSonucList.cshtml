@@ -1,0 +1,171 @@
+﻿
+@model KhufuMobile.Models.ViewModels.NumuneModel
+
+
+
+<div ng-app="analizApp" ng-controller="analizCtrl" ng-init="mySwitch=true">
+ 
+    <div ng-show="mySwitch">
+        <img src="~/images/InternetSlowdown_Day.gif" />
+    </div>
+    <div ng-show="!mySwitch">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Analiz</th>
+                        <th>Sonuç</th>
+                        <th>Ölçüm Kararsızlığı</th>
+                        <th>Sonuç Girildi</th>
+                        <th>Olumlu</th>
+                        <th>Başlama Tarihi</th>
+                        <th>Bitiş Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in analizSonucList" ng-class-odd="'striped'">
+                        <td>
+                            <span>{{x.analiz}}</span>
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.sonuc}}</span>
+                            <input ng-show="x.showEdit" type="text" ng-model="x.sonuc" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.OlcumKararsizligi}}</span>
+                            <input ng-show="x.showEdit" type="text" ng-model="x.OlcumKararsizligi" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.DegerGirildi}}</span>
+                            <input ng-show="x.showEdit" type="checkbox" ng-model="x.DegerGirildi" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.Olumlu}}</span>
+                            <input ng-show="x.showEdit" type="checkbox" ng-model="x.Olumlu" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.BaslamaTarihi | date:'yyyy-MM-dd HH:mm'}}</span>
+                            <input ng-show="x.showEdit" type="datetime-local" ng-model="x.BaslamaTarihi" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit">{{x.BitisTarihi | date:'yyyy-MM-dd HH:mm'}}</span>
+                            <input ng-show="x.showEdit" type="datetime-local" ng-model="x.BitisTarihi" class="form-control">
+                        </td>
+                        <td>
+                            <span ng-show="!x.showEdit" ng-click="toggleEdit(x)" class="glyphicon glyphicon-pencil"></span>
+                            <span ng-show="x.showEdit" ng-click="toggleEdit(x)" class="glyphicon glyphicon-ok"></span>
+                            <span ng-click="toggleMainSelection(x.analizId)" class="glyphicon glyphicon-floppy-remove" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Analiz Ekle</button>
+        <button ng-click="analizKaydet()" type="button" class="btn btn-info btn-lg">Kaydet</button>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Analiz</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in analizler">
+                                        <td ng-show="false">{{ x.id }}</td>
+                                        <td>{{ x.analiz }}</td>
+                                        <td>
+                                            <span ng-click="toggleSelection(x.analizId)" class="glyphicon glyphicon-plus-sign" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button ng-click="addItem()" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Analiz Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function myFunction() {
+        var x = document.createElement("INPUT");
+        x.setAttribute("type", "datetime-local");
+        document.body.appendChild(x);
+    }
+</script>
+
+<script>
+    var list = [];
+    var sonuclar;
+    var mainList = [];
+    var app = angular.module('analizApp', []);
+    app.controller('analizCtrl', function ($scope, $http) {
+
+        $scope.toggleEdit = function (analiz) {
+            analiz.showEdit = analiz.showEdit ? false : true;
+            analiz.isUpated = true;
+        }
+         
+        var apiurl = "/api/Analizler?numuneId=" + '@Model.Id';
+        $scope.numuneId = '@Model.Id';
+        $http.get(apiurl).then(function (response) {
+            $scope.analizSonucList = response.data.sonuclar;
+            $scope.analizler = response.data.analizler;
+            
+            $scope.mySwitch = false;
+        });
+
+        $scope.selection = [];
+
+        $scope.toggleSelection = function toggleSelection(id) {
+            angular.forEach($scope.analizler, function (value) {
+                if (value.analizId == id) {
+                    $scope.analizSonucList.push(value);
+                    var index = $scope.analizler.indexOf(value);
+                    $scope.analizler.splice(index, 1);
+                }
+            });
+        };
+
+        $scope.toggleMainSelection = function toggleMainSelection(id) {
+            angular.forEach($scope.analizSonucList, function (value) {
+                if (value.analizId == id) {
+                    $scope.analizler.push(value);
+                    var index = $scope.analizSonucList.indexOf(value);
+                    $scope.analizSonucList.splice(index, 1);
+                }
+            });
+        }
+
+        $scope.analizKaydet = function () {
+            $http({
+                url: "/api/SaveAnaliz",
+                dataType: 'json',
+                method: 'POST',
+                data: { "inList": $scope.analizSonucList, "outList": $scope.analizler, "numuneId": $scope.numuneId },
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).success(function (response) {
+                $scope.value = response;
+                alert(response);
+            })
+          .error(function (error) {
+              alert(error);
+          });
+
+        }
+
+    });
+
+
+</script>
